@@ -70,11 +70,50 @@ app.get('/test', (req, res) => {
   });
   
   app.get('/movies/create', (req, res) => {res.send('read')})
+
   app.get('/movies/read', (req, res) => {
     //let mouvies=req.params.movies;
     res.send({status:200, data:movies })
   
   })
+  app.get('/movies/read/by-date', (req, res) => {
+    //let mouvies=req.params.movies;
+    
+
+    res.send({status:200, data:movies.sort((a,b)=> a.year-b.year )
+    
+    
+    
+    
+    })
+  
+  })
+  app.get('/movies/read/by-rating', (req, res) => {
+    //let mouvies=req.params.movies;
+    
+
+    res.send({status:200, data:movies.sort((a,b)=> b.rating-a.rating )
+    
+    
+    
+    
+    })
+  
+  })
+  app.get('/movies/read/by-title', (req, res) => {
+    //let mouvies=req.params.movies;
+    
+
+    res.send({status:200, data:movies.sort((a,b)=> a.title.localeCompare(b.title ))
+    
+    
+    
+    
+    })
+  
+  })
+
+
   app.get('/movies/update', (req, res) => {res.send('update')})
   app.get('/movies/delete', (req, res) => {res.send('delete')})
 
