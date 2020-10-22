@@ -28,6 +28,19 @@ app.get('/test', (req, res) => {
 
   
   });
+
+  app.get('/hello/:id', (req, res) => {
+    //return res.send('ok');
+
+    res.send(
+      {
+           status:200,
+           message:"Hello, "+req.params.id
+      }
+  )
+
+
+  });
    
   app.post('/', (req, res) => {
     return res.send('Received a POST HTTP method');
