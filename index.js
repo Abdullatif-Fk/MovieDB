@@ -6,7 +6,9 @@
     { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
 ]
 
+const { match } = require('assert');
 const express =require('express');
+const { isNumber } = require('util');
 const app = express();
 const PORT = 3000;
 
@@ -172,11 +174,33 @@ app.get('/test', (req, res) => {
 
   
   })
+  app.get('/movies/delete/:idm', (req, res) => {
+    var idm =req.params.idm;
+    var index=parseInt(idm)
+    if(Number.isInteger(index)){
+     // res.send(id+1)
+    if(index>=0 && index<movies.length){
+       //console.log(index);
+       
+       movies.splice(index,1);
+       res.send(movies);
+      
+        
+      // movies.pop();
+       
+      }
+      
+    }
+    
+
+
+
+  })
 
 
 
   app.get('/movies/update', (req, res) => {res.send('update')})
-  app.get('/movies/delete', (req, res) => {res.send('delete')})
+  //app.get('/movies/delete', (req, res) => {res.send('delete')})
 
 
   
