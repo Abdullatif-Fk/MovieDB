@@ -56,8 +56,8 @@ app.get('/test', (req, res) => {
     let value =req.query.s;
     
     if(value ===""){
-      res.send({status:500, error:true, message:"you have to provide a search"})
-      res.status(500)
+      res.status(500).send({status:500, error:true, message:"you have to provide a search"})
+      //res.status(500).send('Not found');
   // return new ResponseEntity(httpStatus.INTERNAL_SERVER_ERROR)
     }
     
@@ -69,7 +69,7 @@ app.get('/test', (req, res) => {
 
   });
   
-  app.get('/movies/create', (req, res) => {res.send('read')})
+  app.get('/movies/create', (req, res) => {res.send('create')})
 
   app.get('/movies/read', (req, res) => {
     //let mouvies=req.params.movies;
@@ -112,6 +112,21 @@ app.get('/test', (req, res) => {
     })
   
   })
+  
+
+  app.get('/movies/read/id/:index', (req, res) => {
+    //let mouvies=req.params.movies;
+    const i =req.params.index;
+    if(i<0||i>movies.length){
+      res.status(404).send({status:404, error:true, message:'the movie '+i+' does not exist'})
+
+    }else{
+      res.send({status:200, data:movies[i] })
+    }
+    
+  
+  })
+
 
 
   app.get('/movies/update', (req, res) => {res.send('update')})
