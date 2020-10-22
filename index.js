@@ -127,6 +127,52 @@ app.get('/test', (req, res) => {
   
   })
 
+  app.get('/movies/add', (req, res) => { 
+    //res.send('create')
+    var url=require("url");
+    var yearvalidate=/^[0-9]{4}$/;
+    var ratingvalidatefloat=/^[-+]?[0-9]+\.[0-9]+$/;
+    var ratingvalidateint=/^[0-9]$/;
+
+
+    var parsedurl= url.parse(req.url,true);
+    var title=req.query.title;
+    var year=req.query.year;
+    var rating=req.query.rating;
+
+    //console.log(year)
+
+  /*if(yearvalidate.test(parsedurl.query.year)){
+    res.send({status:200, data:"TRUE" })
+  }else{
+    res.send({status:200, data:"FALSE" })
+
+  }*/
+  if(title===""||!yearvalidate.test(parsedurl.query.year)||year===""){
+    res.status(403).send({status:403, error:true, message:'you cannot create a movie without providing a title and a year'})
+    
+  }else{
+    if(rating===""){
+      const movie={
+        title:title.toString() ,year:parseInt(year),rating:4
+      }
+      movies.push(movie);
+      res.send(movies)
+
+    }else if(ratingvalidatefloat.test(parsedurl.query.rating)||ratingvalidateint.test(parsedurl.query.rating)){
+      const movie={
+        title:title.toString() ,year:parseInt(year),rating:parseFloat(rating)
+      }
+      movies.push(movie);
+      res.send(movies)
+
+    }
+  }
+
+
+  
+  })
+
 
 
   app.get('/movies/update', (req, res) => {res.send('update')})
