@@ -8,7 +8,6 @@
 
 const { match } = require('assert');
 const express =require('express');
-const { isNumber } = require('util');
 const app = express();
 const PORT = 3000;
 
@@ -71,7 +70,7 @@ app.get('/test', (req, res) => {
 
   });
   
-  app.get('/movies/create', (req, res) => {res.send('create')})
+  app.post('/movies/create', (req, res) => {res.send('create')})
 
   app.get('/movies/read', (req, res) => {
     //let mouvies=req.params.movies;
@@ -129,7 +128,7 @@ app.get('/test', (req, res) => {
   
   })
 
-  app.get('/movies/add', (req, res) => { 
+  app.post('/movies/add', (req, res) => { 
     //res.send('create')
     var url=require("url");
     var yearvalidate=/^[0-9]{4}$/;
@@ -150,6 +149,7 @@ app.get('/test', (req, res) => {
     res.send({status:200, data:"FALSE" })
 
   }*/
+  
   if(title===""||!yearvalidate.test(parsedurl.query.year)||year===""){
     res.status(403).send({status:403, error:true, message:'you cannot create a movie without providing a title and a year'})
     
@@ -174,7 +174,7 @@ app.get('/test', (req, res) => {
 
   
   })
-  app.get('/movies/delete/:idm', (req, res) => {
+  app.delete('/movies/delete/:idm', (req, res) => {
     var idm =req.params.idm;
     var index=parseInt(idm)
     if(Number.isInteger(index)){
@@ -196,7 +196,7 @@ app.get('/test', (req, res) => {
 
 
   })
-app.get("/movies/update/:id",(req,res)=> {
+app.put("/movies/update/:id",(req,res)=> {
   var url=require("url");
   var parsedurl= url.parse(req.url,true);
 
@@ -226,7 +226,7 @@ app.get("/movies/update/:id",(req,res)=> {
 })
 
 
-  app.get('/movies/update', (req, res) => {res.send('update')})
+  app.put('/movies/update', (req, res) => {res.send('update')})
   //app.get('/movies/delete', (req, res) => {res.send('delete')})
 
 
