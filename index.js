@@ -8,6 +8,19 @@
 
 const { match } = require('assert');
 const express =require('express');
+
+
+const path = require('path');
+////////////////////////////////////////////////////////////////////////
+var router = express.Router();
+var mongo = require('mongodb').MongoClient;
+var objectId = require('mongodb').ObjectID;
+var url = 'mongodb://localhost:27017/test';
+
+
+///////////////////////////////////////////////////////////////////////
+
+
 const app = express();
 const PORT = 3000;
 
@@ -15,7 +28,7 @@ const PORT = 3000;
 app.get('/', (req, res) => {res.send('ok')})
 
 
-app.get('/test', (req, res) => {
+/*app.get('/test', (req, res) => {
     //return res.send('ok');
     
     res.send(
@@ -26,7 +39,7 @@ app.get('/test', (req, res) => {
   )
 
 
-  });
+  });*/
   app.get('/time', (req, res) => {
     //return res.send('ok');
     let date = new Date();
@@ -72,9 +85,25 @@ app.get('/test', (req, res) => {
   
   app.post('/movies/create', (req, res) => {res.send('create')})
 
-  app.get('/movies/read', (req, res) => {
+  router.get('/movies/read', (req, res) => {
     //let mouvies=req.params.movies;
-    res.send({status:200, data:movies })
+    //res.send({status:200, data:movies })
+////////////////////////////////////////////////////////////////
+var resultArray = [];
+  mongo.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var cursor = db.collection('user-data').find();
+    cursor.forEach(function(doc, err) {
+      assert.equal(null, err);
+      resultArray.push(doc);
+    }, function() {
+      db.close();
+      res.render('index', {items: resultArray});
+    });
+  });
+/////////////////////////////////////////////////////////////////
+
+
   
   })
   app.get('/movies/read/by-date', (req, res) => {
@@ -128,7 +157,7 @@ app.get('/test', (req, res) => {
   
   })
 
-  app.post('/movies/add', (req, res) => { 
+  router.post('/movies/add', (req, res) => { 
     //res.send('create')
     var url=require("url");
     var yearvalidate=/^[0-9]{4}$/;
@@ -158,15 +187,41 @@ app.get('/test', (req, res) => {
       const movie={
         title:title.toString() ,year:parseInt(year),rating:4
       }
-      movies.push(movie);
-      res.send(movies)
+      //movies.push(movie);
+      //res.send(movies)
+      /////////////////////////////////////////////////
+      mongo.connect(url, function(err, db) {
+        assert.equal(null, err);
+        db.collection('user-data').insertOne(movie, function(err, result) {
+          assert.equal(null, err);
+          console.log('Item inserted');
+          db.close();
+        });
+        
+      });
+
+      /////////////////////////////////////////////////
 
     }else if(ratingvalidatefloat.test(parsedurl.query.rating)||ratingvalidateint.test(parsedurl.query.rating)){
       const movie={
         title:title.toString() ,year:parseInt(year),rating:parseFloat(rating)
       }
-      movies.push(movie);
-      res.send(movies)
+      //movies.push(movie);
+      //res.send(movies)
+      ////////////////////////////////////
+      mongo.connect(url, function(err, db) {
+        assert.equal(null, err);
+        db.collection('user-data').insertOne(movie, function(err, result) {
+          assert.equal(null, err);
+          console.log('Item inserted');
+          db.close();
+        });
+        
+      });
+    
+      //res.redirect('/');
+
+      ///////////////////////////////////
 
     }
   }
