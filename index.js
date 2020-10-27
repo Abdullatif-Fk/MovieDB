@@ -196,7 +196,34 @@ app.get('/test', (req, res) => {
 
 
   })
+app.get("/movies/update/:id",(req,res)=> {
+  var url=require("url");
+  var parsedurl= url.parse(req.url,true);
 
+  //var ratingvalidatefloat=/^[-+]?[0-9]+\.[0-9]+$/;
+  var ratingvalidateint=/^[0-9]$/;
+  var yearvalidate=/^[0-9]{4}$/;
+  var id =req.params.id;
+  var title=req.query.title;
+  var rating=parseFloat(req.query.rating);
+  var year=req.query.year;
+  id=parseInt(id);
+  if(title!=""){
+    movies[id].title=title;
+  }
+  
+   if(rating!=""&& ratingvalidateint.test(parsedurl.query.rating)){
+    movies[id].rating=parseFloat(rating);
+    //console.group(rating)
+
+  }
+  if(yearvalidate.test(parsedurl.query.year)&&year!=""){
+    movies[id].year=year;
+  }
+
+  res.send(movies);
+
+})
 
 
   app.get('/movies/update', (req, res) => {res.send('update')})
